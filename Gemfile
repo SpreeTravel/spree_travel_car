@@ -1,8 +1,10 @@
-source 'http://localhost/rubygems/'
+# Configuracion de PQR
+GEMS_PATH = 'http://localhost/rubygems/'
+SPREE_PATH = 'file:///home/pqr/work/jaf/spree'
+########################################################################
 
-# Provides basic authentication functionality for testing parts of your engine
-#gem 'spree_auth_devise', github: 'spree/spree_auth_devise'
+source GEMS_PATH
 
-gem 'spree_travel', :path => '../spree_travel/'
+gem 'spree_travel', :path => '../spree_travel'
 
 gemspec
