@@ -5,17 +5,17 @@ module SpreeTravelRentacar
       class_option :auto_run_migrations, :type => :boolean, :default => false
 
       def add_javascripts
-        append_file 'app/assets/javascripts/store/all.js', "//= require store/spree_travel_rentacar\n"
-        append_file 'app/assets/javascripts/admin/all.js', "//= require admin/spree_travel_rentacar\n"
+        append_file 'app/assets/javascripts/store/all.js', "//= require store/spree_travel_car\n"
+        append_file 'app/assets/javascripts/admin/all.js', "//= require admin/spree_travel_car\n"
       end
 
       def add_stylesheets
-        inject_into_file 'app/assets/stylesheets/store/all.css', " *= require store/spree_travel_rentacar\n", :before => /\*\//, :verbose => true
-        inject_into_file 'app/assets/stylesheets/admin/all.css', " *= require admin/spree_travel_rentacar\n", :before => /\*\//, :verbose => true
+        inject_into_file 'app/assets/stylesheets/store/all.css', " *= require store/spree_travel_car\n", :before => /\*\//, :verbose => true
+        inject_into_file 'app/assets/stylesheets/admin/all.css', " *= require admin/spree_travel_car\n", :before => /\*\//, :verbose => true
       end
 
       def add_migrations
-        run 'bundle exec rake railties:install:migrations FROM=spree_travel_rentacar'
+        run 'bundle exec rake railties:install:migrations FROM=spree_travel_car'
       end
 
       def run_migrations

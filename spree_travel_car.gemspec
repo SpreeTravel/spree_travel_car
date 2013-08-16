@@ -1,7 +1,7 @@
 # encoding: UTF-8
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
-  s.name        = 'spree_travel_rentacar'
+  s.name        = 'spree_travel_car'
   s.version     = '2.0.3'
   s.summary     = 'Rent a car into spree'
   s.description = 'Rent a cat into spree'
@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.author    = 'OpenJAF'
   s.email     = 'pqr@openjaf.com'
-  s.homepage  = 'http://github.com/openjaf/spree_travel_rentacar'
+  s.homepage  = 'http://github.com/openjaf/spree_travel_car'
 
   #s.files       = `git ls-files`.split("\n")
   #s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.requirements << 'none'
 
   s.add_dependency 'spree_core', '~> 2.0.3'
-  s.add_dependency 'spree_travel'
+  s.add_dependency 'spree_travel_core'
 
   s.add_development_dependency 'capybara', '~> 2.0'
   s.add_development_dependency 'coffee-rails'
