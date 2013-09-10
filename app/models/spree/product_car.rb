@@ -6,7 +6,7 @@ module Spree
     end
 
     def parent_relation_name
-      Constant::RELATION_IS_CAR_OF_RENTACAR
+      Spree::RELATION_IS_CAR_OF_RENTACAR
     end
 
     def variant_for_these_params(params)
@@ -16,8 +16,8 @@ module Spree
       transmission_id = context.transmission_id
       duration = (check_out - check_in).to_i
 
-      check_in_str = check_in.strftime(Constant::FORMAT_DATE)
-      check_out_str = check_out.strftime(Constant::FORMAT_DATE)
+      check_in_str = check_in.strftime(Spree::FORMAT_DATE)
+      check_out_str = check_out.strftime(Spree::FORMAT_DATE)
 
       sql  = "SELECT sv.id AS id "
       sql += ", sv.sku AS sku "
