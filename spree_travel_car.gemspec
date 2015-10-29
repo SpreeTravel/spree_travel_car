@@ -2,13 +2,13 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_travel_car'
-  s.version     = '2.0.3'
+  s.version     = '3.0.0'
   s.summary     = 'Rent a car into spree'
   s.description = 'Rent a cat into spree'
   s.required_ruby_version = '>= 1.9.3'
 
   s.author    = 'OpenJAF'
-  s.email     = 'pqr@openjaf.com'
+  s.email     = 'pqr@openjaf.com, rperezalejo@openjaf.com'
   s.homepage  = 'http://github.com/openjaf/spree_travel_car'
 
   #s.files       = `git ls-files`.split("\n")
@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'spree_core', '~> 2.0.3'
+  s.add_dependency 'spree_core', '~> 3.0.0'
   s.add_dependency 'spree_travel_core'
 
   s.add_development_dependency 'capybara', '~> 2.0'

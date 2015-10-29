@@ -2,4 +2,15 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  spree:
+    car: Car
+    economic: Economic
+    standard: Standard
+    luxary: Luxary
+    van: Van
+    automatic: Automatic
+    mecanic: Mecanic
+    pickup_date: Pickup Date
+    pickup_destination: Pickup Destination
+    return_date: Return Date
+    return_destination: Return Destination
