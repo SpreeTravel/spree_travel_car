@@ -1,0 +1,23 @@
+<div class="row">
+<% @product.variants.each do |v|%>
+  <div class="col-md-3">
+    <div>
+     <div class="box-title">
+        <h3 class="title"><%= v.option_values.first.presentation %></h3>
+        <h4 class="title"><%= v.option_values.last.presentation %></h4>
+     </div>
+    </div>
+    <% hashs = display_the_price(v)%>
+    <% hashs.each do |hash|%>
+      <div class="price-section">
+        <div class="rate"><small>price:</small> <%=hash[:price]%></div>
+
+        <div class="action-section">
+          <%= render :partial => 'spree/products/product_type_cart_form', :locals => { product: @product, variant_id: v.id, rate_id: hash[:rate], mini: true} %>
+        </div>
+      </div>
+    <%end%>
+  </div>
+<%end%>
+</div>
+
