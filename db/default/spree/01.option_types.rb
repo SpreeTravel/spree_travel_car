@@ -11,6 +11,7 @@ option_types = [
   {:name => "return_date", :presentation => "Return Date", :attr_type => 'date'},
   {:name => "pickup_destination", :presentation => "Pickup Destination", :attr_type => 'destination'},
   {:name => "return_destination", :presentation => "Return Destination", :attr_type => 'destination'},
+  {:name => "adult", :presentation => "Adult", :attr_type => 'integer', :short => 'Adult'},
 ]
 
 ### Creating Option Types
