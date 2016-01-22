@@ -1,0 +1,69 @@
+<%
+  params["#{prefix}pickup_date"] ||= Time.now.to_date
+  params["#{prefix}return_date"] ||= Time.now.to_date + 3
+  params["#{prefix}category"] ||= Spree::OptionType.find_by_name('category').option_values.first.presentation
+
+  # params["#{prefix}adult"] ||= 2
+  # params["#{prefix}child"] ||= 0
+  # params["#{prefix}rooms"] ||= 1
+
+  if p.name.downcase == active_product
+    active_tab = 'active'
+  else
+    active_tab = ''
+  end
+  car = Spree::ProductType.find_by_name('car')
+%>
+<div id='<%="#{prefix}fields"%>' class="tab-pane <%= active_tab %>" role="tabpanel">
+  <div class="col-md-12" >
+    <%= form_tag({:controller => :products, :action => :index}, {:method => :get, :id => :home_search_box}) do %>
+
+      <input type="hidden" id="the_product_type" name="product_type" value="car">
+
+      <div class="search_box_row form-group">
+        <% category = car.context_option_types.where(name: 'category').first %>
+        <div class="form-group">
+          <label for="<%= prefix %><%=category.name%>"><%= Spree.t(category.name) %></label>
+           <% options = category.option_values.map { |ov| [ov.presentation, ov.id] } %>
+          <%= select_tag "#{prefix}#{category.name}", options_for_select(options, params["car_#{category.name}"]),
+                    :class => "select2 #{prefix}selects form-control" %>
+        </div>
+      </div>
+
+      <div class="row">
+        <% pickup_destination =  car.context_option_types.where(name: 'pickup_destination').first %>
+        <div class="search_box_row form-group  col-md-6">
+          <label for="<%= prefix %><%=pickup_destination.name%>"><%= Spree.t(pickup_destination.presentation) %></label>
+          <div class="search_box_right">
+            <%= text_field_tag "#{prefix}pickup_destination", params['car_pickup_destination'], :class => "#{prefix}inputs form-control" %>
+          </div>
+        </div>
+
+        <% return_destination =  car.context_option_types.where(name: 'return_destination').first %>
+        <div class="search_box_row form-group col-md-6">
+          <label for="<%= prefix %><%=return_destination.name%>"><%= Spree.t(return_destination.presentation) %></label>
+          <div class="search_box_right">
+            <%= text_field_tag "#{prefix}return_destination", params['car_return_destination'], :class => "#{prefix}inputs form-control" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <% car.context_option_types.where(attr_type: 'date').each do |d| %>
+          <div class="search_box_row form-group col-md-6">
+            <label for="<%= prefix %><%=d.name%>"><%= Spree.t(d.presentation.downcase) %></label>
+            <%= text_field_tag "#{prefix}#{d.name}", params["car_#{d.name}"], :class => "datepicker #{prefix}inputs form-control" %>
+          </div>
+        <%end%>
+      </div>
+
+      <% adult =  car.context_option_types.where(name: 'adult').first %>
+      <%= hidden_field_tag "#{prefix}#{adult.name}", params["car_#{adult.name}"], :class => "datepicker #{prefix}inputs form-control", :value=>"1" %>
+
+      <%= submit_tag Spree.t('search'), :id => :submit, :class => 'btn btn-success' %>
+
+    <% end %>
+  </div>
+</div>
+
+
