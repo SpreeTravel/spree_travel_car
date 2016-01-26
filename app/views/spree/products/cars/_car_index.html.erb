@@ -23,10 +23,24 @@
     <div class="details col-xs-12 col-sm-8 col-md-9">
     <div>
       <div class="box-title">
-        <h4 class="title"><%= category%></h4>
+        <h4 class="title">
+          <%=
+             if category.to_i == 0
+                category
+             else
+               Spree::OptionValue.find(category.to_i).presentation
+             end
+          %>
+        </h4>
       </div>
     </div>
-    <% hash = display_the_price(Spree::Variant.where(product: product.id).includes(:option_values).where(spree_option_values: {presentation: category}).first)%>
+    <%
+        if category.to_i == 0
+          hash = display_the_price(Spree::Variant.where(product: product.id).includes(:option_values).where(spree_option_values: {presentation: category}).first)
+        else
+          hash = display_the_price(Spree::Variant.where(product: product.id).includes(:option_values).where(spree_option_values: {id: category.to_i}).first)
+        end
+    %>
     <% if !hash.empty? %>
       <div class="details col-xs-12 col-sm-8 col-md-9">
         <div class="price-section">
