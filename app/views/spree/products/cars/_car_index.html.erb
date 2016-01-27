@@ -36,9 +36,9 @@
     </div>
     <%
         if category.to_i == 0
-          hash = display_the_price(Spree::Variant.where(product: product.id).includes(:option_values).where(spree_option_values: {presentation: category}).first)
+          hash = display_travel_price(Spree::Variant.where(product: product.id).includes(:option_values).where(spree_option_values: {presentation: category}).first)
         else
-          hash = display_the_price(Spree::Variant.where(product: product.id).includes(:option_values).where(spree_option_values: {id: category.to_i}).first)
+          hash = display_travel_price(Spree::Variant.where(product: product.id).includes(:option_values).where(spree_option_values: {id: category.to_i}).first)
         end
     %>
     <% if !hash.empty? %>

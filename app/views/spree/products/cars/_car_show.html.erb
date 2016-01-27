@@ -7,7 +7,7 @@
         <h4 class="title"><%= v.option_values.last.presentation %></h4>
      </div>
     </div>
-    <% hashs = display_the_price(v)%>
+    <% hashs = display_travel_price(v)%>
     <% hashs.each do |hash|%>
       <div class="price-section">
         <div class="rate"><small>price:</small> <%=hash[:price]%></div>
