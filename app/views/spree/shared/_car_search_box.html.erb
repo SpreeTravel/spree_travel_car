@@ -18,7 +18,7 @@
   <div class="col-md-12" >
     <%= form_tag({:controller => :products, :action => :index}, {:method => :get, :id => :home_search_box}) do %>
 
-      <input type="hidden" id="the_product_type" name="product_type" value="car">
+      <input type="hidden" id=<%="#{prefix}product_type"%> name="product_type" value="car">
 
       <div class="search_box_row form-group">
         <% category = car.context_option_types.where(name: 'category').first %>
