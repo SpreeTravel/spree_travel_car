@@ -3,10 +3,6 @@
   params["#{prefix}return_date"] ||= Time.now.to_date + 3
   params["#{prefix}category"] ||= Spree::OptionType.find_by_name('category').option_values.first.presentation
 
-  # params["#{prefix}adult"] ||= 2
-  # params["#{prefix}child"] ||= 0
-  # params["#{prefix}rooms"] ||= 1
-
   if p.name.downcase == active_product
     active_tab = 'active'
   else
@@ -65,5 +61,3 @@
     <% end %>
   </div>
 </div>
-
-
