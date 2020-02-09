@@ -20,7 +20,7 @@ module Spree
             price = days * r.seven_thirteen_days
             array << {price: price, rate: r.id, avg: nil}
           elsif  days >= 14 and days <=29
-            price = days * r.fourteen_tuentynine_days
+            price = days * r.fourteen_twentynine_days
             array << {price: price, rate: r.id, avg: nil}
           end
         end
