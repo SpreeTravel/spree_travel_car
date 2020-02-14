@@ -19,45 +19,45 @@
         </div>
     </div>
     <div class="col-md-4" >
-    <div class="details col-xs-12 col-sm-8 col-md-12">
-    <div>
-      <div class="box-title">
-        <h4 class="title">
-          <%=
-             if category.to_i == 0
-                category
-             else
-               Spree::OptionValue.find(category.to_i).presentation
-             end
-          %>
-        </h4>
+      <div class="details col-xs-12 col-sm-8 col-md-12">
+        <div>
+          <div class="box-title">
+            <h4 class="title">
+              <%=
+                 if category.to_i == 0
+                    category
+                 else
+                   Spree::OptionValue.find(category.to_i).presentation
+                 end
+              %>
+            </h4>
+          </div>
+        </div>
+        <%
+            if category.to_i == 0
+              hash = display_travel_price(variant: Spree::Variant.where(product: product.id).includes(:option_values).where(spree_option_values: {presentation: category}).first)
+            else
+              hash = display_travel_price(variant: Spree::Variant.where(product: product.id).includes(:option_values).where(spree_option_values: {id: category.to_i}).first)
+            end
+        %>
+        <% if hash.present? %>
+          <div class="details col-xs-12 col-sm-8 col-md-9">
+            <div class="price-section">
+              <span class="price"><small>Price:</small><%= hash.first[:price]%> </span>
+            </div>
+            <div class="action-section">
+              <%= render :partial => 'spree/products/product_type_cart_form', :locals => { product: product,
+                                                                                           variant_id: product.variants.first.id,
+                                                                                           rate_id: hash.first[:rate]} %>
+            </div>
+          </div>
+        <%else%>
+          <div class="price">
+            <span><%= t(:no_price) %> </span>
+          </div>
+        <%end%>
       </div>
     </div>
-    <%
-        if category.to_i == 0
-          hash = display_travel_price(Spree::Variant.where(product: product.id).includes(:option_values).where(spree_option_values: {presentation: category}).first)
-        else
-          hash = display_travel_price(Spree::Variant.where(product: product.id).includes(:option_values).where(spree_option_values: {id: category.to_i}).first)
-        end
-    %>
-    <% if !hash.empty? %>
-      <div class="details col-xs-12 col-sm-8 col-md-9">
-        <div class="price-section">
-          <span class="price"><small>Price:</small><%= hash.first[:price]%> </span>
-        </div>
-        <div class="action-section">
-          <%= render :partial => 'spree/products/product_type_cart_form', :locals => { product: product,
-                                                                                       variant_id: product.variants.first.id,
-                                                                                       rate_id: hash.first[:rate]} %>
-        </div>
-      </div>
-    <%else%>
-      <div class="price">
-        <span><%= t(:no_price) %> </span>
-      </div>
-    <%end%>
-  </div>
-  </div>
   </div>
 </li>
 

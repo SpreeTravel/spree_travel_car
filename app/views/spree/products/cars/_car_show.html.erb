@@ -1,27 +1,22 @@
 <div class="row">
   <% @product.variants.each do |variant|%>
-  <div class="col-md-6">
-    <% hashs = display_travel_price(variant)%>
-
-    <% hashs.each do |hash|%>
-      <div>
+    <% display_travel_price(variant: variant).each do |hash|%>
+      <div class="col-md-6">
         <div class="box-title">
-          <h3 class="title"><%= variant.option_values.first.presentation %></h3>
-          <h4 class="title"><%= variant.option_values.last.presentation %></h4>
+          <h4 class="title"><%= variant.option_values_presentation.to_sentence(words_connector: 'and')  %></h4>
         </div>
-      </div>
-      <div class="price-section">
-        <div class="rate"><small>price:</small> <%=hash[:price]%></div>
+        <div class="price-section">
+          <div class="rate"><small>price:</small> <%=hash[:price]%></div>
 
-        <div class="action-section">
-          <%= render :partial => 'spree/products/product_type_cart_form', :locals => { product: @product,
-                                                                                       variant_id: variant.id,
-                                                                                       rate_id: hash[:rate],
-                                                                                       mini: true } %>
+          <div class="action-section">
+            <%= render partial: 'spree/products/product_type_cart_form', locals: { product: @product,
+                                                                                   variant_id: variant.id,
+                                                                                   rate_id: hash[:rate],
+                                                                                   mini: true } %>
+          </div>
         </div>
       </div>
     <%end%>
-  </div>
-<%end%>
+  <%end%>
 </div>
 
