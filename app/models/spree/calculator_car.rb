@@ -13,16 +13,16 @@ module Spree
 
           days = (Date.parse(context.return_date(options).to_s) - Date.parse(context.pickup_date(options).to_s)).to_i
 
-          if days >= 3 and days <= 6
-            price = days * r.three_six_days
-            array << {price: price, rate: r.id, avg: nil}
-          elsif days >= 7 and days <= 13
-            price = days * r.seven_thirteen_days
-            array << {price: price, rate: r.id, avg: nil}
-          elsif  days >= 14 and days <=29
-            price = days * r.fourteen_twentynine_days
-            array << {price: price, rate: r.id, avg: nil}
-          end
+          price = if days >= 3 and days <= 6
+                    days * r.three_six_days
+                  elsif days >= 7 and days <= 13
+                    days * r.seven_thirteen_days
+                  elsif  days >= 14 and days <=29
+                    days * r.fourteen_twentynine_days
+                  end
+
+          array << {price: price.format, rate: r.id, avg: nil}
+
         end
       end
       array
