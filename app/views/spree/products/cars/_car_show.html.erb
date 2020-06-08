@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row mt-4">
   <% @product.variants.each do |variant|%>
     <% display_travel_price(variant: variant).each do |hash|%>
       <div class="col-md-6">
@@ -8,12 +8,16 @@
         <div class="price-section">
           <div class="rate"><small>price:</small> <%=hash[:price]%></div>
 
-          <div class="action-section">
-            <%= render partial: 'spree/products/product_type_cart_form', locals: { product: @product,
-                                                                                   variant_id: variant.id,
-                                                                                   rate_id: hash[:rate],
-                                                                                   mini: true } %>
-          </div>
+          <% if variant.can_supply? %>
+            <div class="action-section">
+              <%= render partial: 'spree/products/product_type_cart_form', locals: { product: @product,
+                                                                                     variant_id: variant.id,
+                                                                                     rate_id: hash[:rate],
+                                                                                     mini: true } %>
+            </div>
+          <% else %>
+            <span class="out-of-stock"><%= Spree.t(:out_of_stock) %></span>
+        <% end %>
         </div>
       </div>
     <%end%>
