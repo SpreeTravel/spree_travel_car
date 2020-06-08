@@ -4,56 +4,54 @@
    category = params[:car_category]
 %>
 <li id="product_<%= product.id %>" class="col-md-12 product-item" data-hook2="product_<%=product.product_type.name%>" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
-  <div class="container">
-    <div class="row">
-        <div class="col-md-2">
-          <%= link_to small_image(product, itemprop: "image"), new_params %>
-        </div>
-        <div class="col-md-6">
-            <div class="product-title">
-              <%= link_to(new_params, class: 'info', itemprop: "name", title: product.name) do %>
-                  <%= product.name %>
-              <%end%>
-            </div>
-            <div class="product-mini-description">
-              <%= truncate(product.description, length: 150)%>
-            </div>
-        </div>
-        <div class="col-md-4" >
-          <div class="details col-xs-12 col-sm-8 col-md-12">
-            <div>
-              <div class="box-title">
-                <h4 class="title">
-                  <%= category.to_i == 0 ? category : Spree::OptionValue.find(category.to_i).presentation %>
-                </h4>
-              </div>
-            </div>
-            <%
-                if category.to_i == 0
-                  hash = display_travel_price(variant: product.variants.joins(:option_values).where(spree_option_values: {presentation: category}).first)
-                else
-                  hash = display_travel_price(variant: product.variants.where(product: product.id).includes(:option_values).where(spree_option_values: {id: category.to_i}).first)
-                end
-            %>
-            <% if hash.present? %>
-              <div class="details col-xs-12 col-sm-8 col-md-9">
-                <div class="price-section">
-                  <span class="price"><small>Price:</small><%= hash.first[:price]%> </span>
-                </div>
-                <div class="action-section">
-                  <%= render partial:'spree/products/product_type_cart_form', locals: {product: product,
-                                                                                       variant_id: product.variants.first.id,
-                                                                                       rate_id: hash.first[:rate]} %>
-                </div>
-              </div>
-            <%else%>
-              <div class="price">
-                <span><%= t(:no_price) %> </span>
-              </div>
-            <%end%>
-          </div>
-        </div>
+  <div class="row">
+    <div class="col-2">
+      <%= link_to small_image(product, itemprop: "image"), new_params %>
     </div>
+    <div class="col-6">
+      <div class="product-title">
+        <%= link_to(new_params, class: 'info', itemprop: "name", title: product.name) do %>
+          <%= product.name %>
+        <%end%>
+      </div>
+      <div class="product-mini-description">
+        <%= truncate(product.description, length: 150)%>
+      </div>
+    </div>
+    <div class="col-4" >
+        <div class="details col-xs-12 col-sm-8 col-md-12">
+          <div>
+            <div class="box-title">
+              <h4 class="title">
+                <%= category.to_i == 0 ? category : Spree::OptionValue.find(category.to_i).presentation %>
+              </h4>
+            </div>
+          </div>
+          <%
+            if category.to_i == 0
+              hash = display_travel_price(variant: product.variants.joins(:option_values).where(spree_option_values: {presentation: category}).first)
+            else
+              hash = display_travel_price(variant: product.variants.where(product: product.id).includes(:option_values).where(spree_option_values: {id: category.to_i}).first)
+            end
+          %>
+          <% if hash.present? %>
+            <div class="details col-xs-12 col-sm-8 col-md-9">
+              <div class="price-section">
+                <span class="price"><small>Price:</small><%= hash.first[:price]%> </span>
+              </div>
+              <div class="action-section">
+                <%= render partial:'spree/products/product_type_cart_form', locals: {product: product,
+                                                                                     variant_id: product.variants.first.id,
+                                                                                     rate_id: hash.first[:rate]} %>
+              </div>
+            </div>
+          <%else%>
+            <div class="price">
+              <span><%= t(:no_price) %> </span>
+            </div>
+          <%end%>
+        </div>
+      </div>
   </div>
 </li>
 
