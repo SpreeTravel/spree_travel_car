@@ -1,14 +1,18 @@
-module Spree::ContextDecorator
-  def pickup_date(options = {temporal: true})
-    get_mixed_option_value(:pickup_date, options)
-  end
+# frozen_string_literal: true
 
-  def return_date(options = {temporal: true})
-    get_mixed_option_value(:return_date, options)
-  end
+module Spree
+  module ContextDecorator
+    def pickup_date(options = { temporal: true })
+      get_mixed_option_value(:pickup_date, options)
+    end
 
-  def category(options = {temporal: true})
-    get_mixed_option_value(:category, options)
+    def return_date(options = { temporal: true })
+      get_mixed_option_value(:return_date, options)
+    end
+
+    def category(options = { temporal: true })
+      get_mixed_option_value(:category, options)
+    end
   end
 end
 
