@@ -35,6 +35,7 @@ module Spree
         def get_base_scope
           base_scope = get_products_by_product_type
           base_scope = get_variants_with_option_types(base_scope)
+          base_scope = check_car_availability(base_scope)
           base_scope = get_products_conditions_for(base_scope, keywords)
           base_scope = add_search_scopes(base_scope)
           base_scope = add_eagerload_scopes(base_scope)
@@ -56,24 +57,8 @@ module Spree
           base_scope.joins(variants: :option_values).where(spree_option_values: {id: option_types_ids}).distinct
         end
 
-        def get_product_by_taxons(base_scope)
-          #TODO take into account that the destination may be and id
-          option_value_destination = Spree::OptionValue.find(destination) unless destination.blank?
-          destination_taxon = Spree::Taxon.find_by_name(option_value_destination.presentation)
-          base_scope = base_scope.in_taxon(taxon) unless taxon.blank?
-          base_scope = base_scope.in_taxon(destination_taxon) unless destination_taxon.blank?
-          base_scope
-        end
-
-        def get_product_by_product_type(base_scope)
-          if product_type
-            base_scope = base_scope.where(:product_type_id => product_type.id )
-          else
-            ids = Spree::ProductType.enabled.map &:id
-            ids << nil # this is to include normal spree products in the results
-            base_scope = base_scope.where(:product_type_id => ids)
-          end
-          base_scope
+        def check_car_availability(base_scope)
+          base_scope.joins(variants: :stock_items).where('count_on_hand > ? OR spree_variants.track_inventory = ?', 0, false)
         end
 
         def add_eagerload_scopes(scope)
