@@ -13,31 +13,27 @@
           <%item.context.option_values.includes(option_value: :option_type).each do |context_option_value| %>
             <%
               option_type = context_option_value.option_value.option_type
-              name = option_type.name
-              attr_type = option_type.attr_type
+              name        = option_type.name
+              attr_type   = option_type.attr_type
             %>
             <div>
               <strong><%= option_type.presentation %></strong>:
               <span class="context-option-type-show" data-attribute="<%=name%>">
-                <%= item.context.get_mixed_option_value(name, temporal:false)%><br/>
+                <%= item.context.get_persisted_option_value(name)%><br/>
               </span>
               <span class="context-option-type-edit is-hidden" data-attribute="<%=name%>">
                 <% tag_name = product_type + '_' + name.to_s%>
                 <% if  attr_type == 'date' %>
                   <%= text_field_tag tag_name,
-                                     item.context.get_mixed_option_value(name, temporal:false),
+                                     item.context.get_persisted_option_value(name),
                                      class: "#{product_type}_inputs admin_datepicker"%><br/>
-                <% elsif name == 'pickup_destination'%>
+                <% elsif attr_type == 'integer'%>
+                  <%= number_field_tag tag_name, item.context.get_persisted_option_value(name), class: "#{product_type}_inputs", :min => 0 %><br/>
+                <% elsif attr_type == 'destination' || attr_type == 'selection'%>
                   <%=
                     options = option_type.option_values.map { |ov| [ov.presentation, ov.id] }
-                    select_tag tag_name, options_for_select(options, item.context.get_mixed_option_value(name, temporal:false)),
-                                 class:  "select2 car_inputs form-control", include_blank: true, required: true
-                  %>
-                <% elsif name == 'return_destination'%>
-                  <%=
-                    options = option_type.option_values.map { |ov| [ov.presentation, ov.id] }
-                    select_tag tag_name, options_for_select(options, item.context.get_mixed_option_value(name, temporal:false)),
-                                 class:  "select2 car_inputs form-control", include_blank: true, required: true
+                    select_tag tag_name, options_for_select(options, [item.context.get_persisted_option_value(name),item.context.get_persisted_option_value(name, :id)]),
+                                 class:  "select2 #{product_type}_inputs form-control", include_blank: true, required: true
                   %>
                 <%end%>
               </span>
