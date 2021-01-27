@@ -44,6 +44,8 @@ module Spree
                        rate.seven_thirteen_days
                      elsif days >= 14 && days <= 29
                        rate.fourteen_twentynine_days
+                     else
+                       Spree::Money.new(0).money
                      end
 
       days * rate_per_day
