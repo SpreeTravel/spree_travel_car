@@ -17,8 +17,6 @@ module Spree
 
       array = []
       rates.each do |rate|
-        next unless valid_dates?(rate)
-
         days = (context_return_date - context_pickup_date).to_i
 
         price = fetch_price(days, rate)
@@ -31,11 +29,6 @@ module Spree
     private
 
     attr_reader :product, :variant, :options, :context_pickup_date, :context_return_date
-
-    def valid_dates?(rate)
-      Date.parse(rate.start_date) <= context_pickup_date &&
-        Date.parse(rate.end_date) >= context_return_date
-    end
 
     def fetch_price(days, rate)
       rate_per_day = if days >= 3 && days <= 6
