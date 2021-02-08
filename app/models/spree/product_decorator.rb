@@ -3,7 +3,7 @@
 module Spree
   module ProductDecorator
     def car?
-      product_type == Spree::ProductType.find_by_name('car')
+      product_type == Spree::ProductType.find_by(name: 'car')
     end
   end
 end
@@ -13,7 +13,7 @@ Spree::Product.prepend Spree::ProductDecorator
 module Spree
   module ProductDecoratorClassMethod
     def cars
-      where(product_type_id: Spree::ProductType.find_by_name('car').id)
+      joins(:product_type).where('spree_product_types.name = ?', 'car')
     end
   end
 end
