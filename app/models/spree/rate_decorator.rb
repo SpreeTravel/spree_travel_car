@@ -15,12 +15,16 @@ module Spree
     end
 
     def check_dates
+      return if rate_option_values.empty?
+
       start_date, end_date = find_dates
 
       errors.add :end_date, 'must be after start date' if end_date <= start_date
     end
 
     def check_dates_overlap
+      return if rate_option_values.empty?
+
       rates = Rate.where(variant_id: variant_id)
 
       start_date, end_date = find_dates

@@ -17,6 +17,8 @@ module Spree
 
       array = []
       rates.each do |rate|
+        next unless match_dates(rate)
+
         days = (context_return_date - context_pickup_date).to_i
 
         price = fetch_price(days, rate)
@@ -42,6 +44,11 @@ module Spree
                      end
 
       days * rate_per_day
+    end
+
+    def match_dates(rate)
+      Date.parse(rate.start_date) <= context_pickup_date &&
+        Date.parse(rate.end_date) >= context_return_date
     end
   end
 end

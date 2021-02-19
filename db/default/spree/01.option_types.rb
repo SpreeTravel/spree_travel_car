@@ -11,7 +11,7 @@ option_types = [
   {name: "return_date", presentation:  "Return Date", attr_type: 'date', travel: true, preciable: false },
   {name: "pickup_destination", presentation:  "Pickup Destination", attr_type: 'destination', travel: true, preciable: false },
   {name: "return_destination", presentation:  "Return Destination", attr_type: 'destination', travel: true, preciable: false },
-  {name: "adult", presentation:  "Adult", attr_type: 'integer', :short => 'Adult', travel: true, preciable: false },
+  {name: "adult", presentation:  "Adult", attr_type: 'integer', short:'Adult', travel: true, preciable: false },
 ]
 
 ### Creating Option Types
