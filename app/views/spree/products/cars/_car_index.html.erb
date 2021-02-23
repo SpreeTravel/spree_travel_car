@@ -31,7 +31,8 @@
                   <span class="price">Price:<%= hash.first[:price]%> </span>
                   <%= render partial:'spree/products/product_type_cart_form', locals: {product: product,
                                                                                        variant_id: hash.first[:variant].id,
-                                                                                       rate_id: hash.first[:rate]} %>
+                                                                                       rate_id: hash.first[:rate],
+                                                                                       price: hash.first[:price]} %>
 
               <%else%>
                 <span class="out-of-stock"><%= Spree.t(:out_of_stock) %></span>
