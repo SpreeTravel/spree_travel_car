@@ -24,7 +24,7 @@
           <div class="price-details mt-2">
             <div>
               <%
-                variant = product.variants.includes(:option_values).where(spree_option_values: {id: category.to_i}).first
+                variant = product.variants.includes(:option_values).where(spree_option_values: {id: category.to_i}).take
                 hash = display_travel_price(variant: variant)
               %>
               <% if hash.present? && hash.first[:variant].can_supply? %>
