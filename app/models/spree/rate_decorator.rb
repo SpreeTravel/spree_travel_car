@@ -30,7 +30,7 @@ module Spree
       start_date, end_date = find_dates
 
       rates.each do |rate|
-        overlap = rate.end_date.to_date >= start_date && end_date >= rate.start_date.to_date
+        overlap = rate.end_date >= start_date && end_date >= rate.start_date
         break errors.add :overlaps, 'there is another rate with those days' if overlap
       end
     end
@@ -39,10 +39,10 @@ module Spree
       start_date = Spree::OptionValue.find_by_name('start_date')
       end_date = Spree::OptionValue.find_by_name('end_date')
 
-      start_date = rate_option_values.select {|e| e.option_value_id == start_date.id }.first.value
-      end_date = rate_option_values.select {|e| e.option_value_id == end_date.id }.first.value
+      start_date = rate_option_values.select {|e| e.option_value_id == start_date.id }.first.date_value
+      end_date = rate_option_values.select {|e| e.option_value_id == end_date.id }.first.date_value
 
-      [start_date.to_date, end_date.to_date]
+      [start_date, end_date]
     end
   end
 end
