@@ -9,10 +9,10 @@ versions = yaml['gems']
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_travel_car'
-  s.version     = '4.0.0'
+  s.version     = versions['spree_travel_core']
   s.summary     = 'Spree Travel Car'
   s.description = 'Spree Travel Abstract Models, references to abstract Locations, etc.'
-  s.required_ruby_version = '>= 2.6.5'
+  s.required_ruby_version = '>= 2.5.0'
 
   s.authors   = ['Pedro Quintero', 'Miguel Sancho', 'Cesar Lage', 'Raul Perez-alejo']
   s.email     = 'rperezalejo@gmail.com'
@@ -23,8 +23,8 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'spree', '~> 4.0.6'
-  s.add_dependency 'spree_travel_core', '~> 4.0'
+  s.add_dependency 'spree', versions['spree']
+  s.add_dependency 'spree_travel_core', versions['spree_travel_core']
   s.add_dependency 'spree_extension'
   s.add_runtime_dependency 'deface', '~> 1.0'
 
