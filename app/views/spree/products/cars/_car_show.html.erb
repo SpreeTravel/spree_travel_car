@@ -13,7 +13,7 @@
               <%= render partial: 'spree/products/product_type_cart_form', locals: { product: @product,
                                                                                      variant_id: variant.id,
                                                                                      rate_id: hash[:rate],
-                                                                                     mini: true } %>
+                                                                                     price: hash[:price] } %>
             </div>
           <% else %>
             <span class="out-of-stock"><%= Spree.t(:out_of_stock) %></span>
