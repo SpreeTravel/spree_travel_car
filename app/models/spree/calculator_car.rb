@@ -2,8 +2,7 @@
 
 module Spree
   class CalculatorCar < BaseCalculator
-    def initialize(context:, product:, variant:, options:)
-      @product = product
+    def initialize(context:, variant:, options:)
       @variant = variant
       @options = options
       @context_pickup_date = Date.parse(context.pickup_date(options).to_s)
@@ -11,21 +10,21 @@ module Spree
     end
 
     def calculate_price
-      return [price: product.price.to_f] if product.rates.empty?
+      return [price: variant.product.price.to_f] if variant.rates.empty?
 
-      rates = variant.rates
+      start_date = Spree::OptionValue.select(:id).find_by(name: 'start_date')
+      end_date = Spree::OptionValue.select(:id).find_by(name: 'end_date')
 
-      array = []
-      rates.each do |rate|
-        next unless match_dates(rate)
+      joins_clause = "INNER JOIN spree_rate_option_values as rot1 ON rot1.rate_id = spree_rates.id AND rot1.option_value_id = #{start_date.id}" \
+                      "INNER JOIN spree_rate_option_values as rot2 ON rot2.rate_id = spree_rates.id AND rot2.option_value_id = #{end_date.id}"
+      where_clause = "spree_rates.variant_id = ? and rot1.date_value <= ? and rot2.date_value >= ?"
 
-        days = (context_return_date - context_pickup_date).to_i
+      rate = Spree::Rate.joins(joins_clause).where(where_clause, variant.id, context_pickup_date, context_return_date).take
 
-        price = fetch_price(days, rate)
+      days = (context_return_date - context_pickup_date).to_i
 
-        array << { price: price.format, rate: rate.id, avg: nil, variant: rate.variant }
-      end
-      array
+      variant.context_price = fetch_price(days, rate)
+      variant.rate_price = rate.id
     end
 
     private
@@ -44,11 +43,6 @@ module Spree
                      end
 
       days * rate_per_day
-    end
-
-    def match_dates(rate)
-      Date.parse(rate.start_date) <= context_pickup_date &&
-        Date.parse(rate.end_date) >= context_return_date
     end
   end
 end
