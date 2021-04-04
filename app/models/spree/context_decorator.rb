@@ -8,7 +8,7 @@ module Spree
       return_destination pickup_date return_date category
     ].each do |method|
       define_method method do |temporal=nil|
-        get_mixed_option_value(method, temporal)
+        get_mixed_option_value(Spree::OptionType.select(:id, :name, :attr_type).find_by(name: method), temporal)
       end
     end
   end

@@ -10,7 +10,7 @@ module Spree
       start_date end_date three_six_days seven_thirteen_days fourteen_twentynine_days
     ].each do |method|
       define_method method do
-        get_persisted_option_value(method)
+        persisted_option_value(Spree::OptionType.select(:id, :name, :attr_type).find_by(name: method))
       end
     end
 
