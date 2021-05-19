@@ -15,11 +15,7 @@ module Spree
       start_date = Spree::OptionValue.select(:id).find_by(name: 'start_date')
       end_date = Spree::OptionValue.select(:id).find_by(name: 'end_date')
 
-      joins_clause = "INNER JOIN spree_rate_option_values as rot1 ON rot1.rate_id = spree_rates.id AND rot1.option_value_id = #{start_date.id}" \
-                      "INNER JOIN spree_rate_option_values as rot2 ON rot2.rate_id = spree_rates.id AND rot2.option_value_id = #{end_date.id}"
-      where_clause = "spree_rates.variant_id = ? and rot1.date_value <= ? and rot2.date_value >= ?"
-
-      rate = Spree::Rate.joins(joins_clause).where(where_clause, variant.id, context_pickup_date, context_return_date).take
+      rate = fetch_query(start_date, end_date)
 
       days = (context_return_date - context_pickup_date).to_i
 
@@ -30,6 +26,15 @@ module Spree
     private
 
     attr_reader :product, :variant, :options, :context_pickup_date, :context_return_date
+
+    def fetch_query(start_date, end_date)
+      joins_clause = "INNER JOIN spree_rate_option_values as rot1 ON rot1.rate_id = spree_rates.id AND rot1.option_value_id = #{start_date.id}" \
+                      "INNER JOIN spree_rate_option_values as rot2 ON rot2.rate_id = spree_rates.id AND rot2.option_value_id = #{end_date.id}"
+      where_clause = "spree_rates.variant_id = ? and rot1.date_value <= ? and rot2.date_value >= ?"
+
+      Spree::Rate.joins(joins_clause)
+                 .where(where_clause, variant.id, context_pickup_date, context_return_date).take
+    end
 
     def fetch_price(days, rate)
       rate_per_day = if days >= 3 && days <= 6
