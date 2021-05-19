@@ -5,7 +5,7 @@ describe Spree::Rate, type: :model do
   %i[start_date end_date three_six_days
       seven_thirteen_days fourteen_twentynine_days].each do |method_name|
     it "should respond to the #{method_name}" do
-      expect_any_instance_of(Spree::Rate).to receive(:get_persisted_option_value).with(method_name)
+      expect_any_instance_of(Spree::Rate).to receive(:persisted_option_value).with(method_name)
       Spree::Rate.new.send(method_name)
     end
   end

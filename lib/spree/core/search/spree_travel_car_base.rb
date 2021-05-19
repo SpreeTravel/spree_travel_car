@@ -34,7 +34,7 @@ module Spree
 
         def get_base_scope
           base_scope = get_products_by_product_type
-          base_scope = get_variants_with_option_types(base_scope)
+          # base_scope = get_variants_with_option_types(base_scope)
           base_scope = check_car_availability(base_scope)
           base_scope = get_products_conditions_for(base_scope, keywords)
           base_scope = add_search_scopes(base_scope)
@@ -43,16 +43,17 @@ module Spree
         end
 
         def get_products_by_product_type
-          product_ids = Spree::Product.joins(variants: :rates)
-                                      .where(product_type_id: product_type.id).pluck(:id)
-                                      # .group(:products).having('COUNT(spree_rates.variant_id) > 0')
-                                      # .pluck(:id)
-          Spree::Product.where(id: product_ids).active
+          Spree::Product.joins(variants: :rates)
+                        .where(product_type_id: Spree::ProductType.find_by(name: 'car').id)
+                        .active
+                        .distinct
+                        # .group(:products).having('COUNT(spree_rates.variant_id) > 0')
+                        # .pluck(:id)
         end
 
         def get_variants_with_option_types(base_scope)
-          common_option_types = (product_type.variant_option_types & product_type.context_option_types).pluck(:name)
-          option_types_ids = common_option_types.map {|option_type| params["#{product_type.name}_#{option_type}"]}
+          common_option_types = (properties[:product_type].variant_option_types & properties[:product_type].context_option_types).pluck(:name)
+          option_types_ids = common_option_types.map {|option_type| params['context']["#{properties[:product_type].name}_#{option_type}"]}
           # TODO make some test to check what happends when no context_option_type is passed, for example a case with `All` i the search box
           base_scope.joins(variants: :option_values).where(spree_option_values: {id: option_types_ids}).distinct
         end
@@ -107,22 +108,13 @@ module Spree
 
         def prepare(params)
           @properties[:params] = params
-          @properties[:taxon] = params[:taxon].blank? ? nil : Spree::Taxon.find(params[:taxon])
           @properties[:keywords] = params[:keywords]
           @properties[:search] = params[:search]
           @properties[:include_images] = params[:include_images]
-          @properties[:product_type] = product_type = Spree::ProductType.find_by_name(params[:product_type])
-          @properties[:destination] = params[product_type.name + "_destination"]
-          @properties[:context] = Context.build_from_params(params, :temporal => true)
-          @properties[:options] = []
 
-          # #TODO: ver que hay que hacer aqui si esto da null
-          # product_type.context_option_types.each do |ptcot|
-          #   prefix = params[:product_type]
-          #   short_name = ptcot.name
-          #   large_name = prefix + "_" + short_name
-          #   @properties[short_name.to_sym] = params[large_name]
-          # end if product_type
+          @properties[:product_type] = Spree::ProductType.find_by_name(params[:product_type])
+          @properties[:context] = params['context'].transform_keys {|k| k.slice(4..-1) }
+          @properties[:options] = []
 
           per_page = params[:per_page].to_i
           @properties[:per_page] = per_page > 0 ? per_page : Spree::Config[:products_per_page]
@@ -130,7 +122,6 @@ module Spree
             @properties[:page] = (params[:page].to_i <= 0) ? 1 : params[:page].to_i
           else
             @properties[:page] = 1
-
           end
         end
       end
