@@ -1,26 +1,25 @@
 <div class="row mt-4">
   <% @product.variants.each do |variant|%>
-    <% display_travel_price(variant: variant).each do |hash|%>
-      <div class="col-md-6">
+    <div class="col-md-6">
         <div class="box-title">
           <h4 class="title"><%= variant.option_values_presentation.to_sentence(words_connector: 'and')  %></h4>
         </div>
         <div class="price-section">
-          <div class="rate"><small>price:</small> <%=hash[:price]%></div>
+          <% variant.calculate_price(@context, temporal: true ) %>
+          <div class="rate"><small>price:</small> <%=variant.context_price%></div>
 
           <% if variant.can_supply? %>
             <div class="action-section">
               <%= render partial: 'spree/products/product_type_cart_form', locals: { product: @product,
                                                                                      variant_id: variant.id,
-                                                                                     rate_id: hash[:rate],
-                                                                                     price: hash[:price] } %>
+                                                                                     rate_id: variant.rate_price,
+                                                                                     price: variant.context_price } %>
             </div>
           <% else %>
             <span class="out-of-stock"><%= Spree.t(:out_of_stock) %></span>
         <% end %>
         </div>
       </div>
-    <%end%>
   <%end%>
 </div>
 
