@@ -15,7 +15,7 @@
               option_type  = context_option_value.option_value.option_type
               name         = option_type.name
               attr_type    = option_type.attr_type
-              presentation = item.context.get_persisted_option_value(name)
+              presentation = item.context.persisted_option_value(option_type)
             %>
             <div>
               <strong><%= option_type.presentation %></strong>:
@@ -38,7 +38,7 @@
                 <% elsif attr_type == 'destination' || attr_type == 'selection'%>
                   <%=
                     options = option_type.option_values.map { |ov| [ov.presentation, ov.id] }
-                    select_tag tag_name, options_for_select(options, [presentation,item.context.get_persisted_option_value(name, :id)]),
+                    select_tag tag_name, options_for_select(options, [presentation,item.context.persisted_option_value(option_type, :id)]),
                                  class:  "select2 #{inputs_class} form-control", include_blank: true, required: true
                   %>
                 <%end%>
