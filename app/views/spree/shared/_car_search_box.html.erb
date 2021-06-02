@@ -1,8 +1,4 @@
 <%
-  params["#{prefix}pickup_date"] ||= Time.now.to_date
-  params["#{prefix}return_date"] ||= Time.now.to_date + 3
-  params["#{prefix}category"] ||= Spree::OptionType.find_by_name('category').option_values.first.presentation
-
   if product_type.name.downcase == active_product
     active_tab = 'active'
   else
