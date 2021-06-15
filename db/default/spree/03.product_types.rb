@@ -1,7 +1,7 @@
 ### This is the data
 rates = ['start_date', 'end_date', 'three_six_days', 'seven_thirteen_days', 'fourteen_twentynine_days']
 contexts = ['category', 'pickup_destination','pickup_date', 'return_destination', 'return_date', 'adult']
-variants = ['category', 'transmision']
+variants = ['category', 'transmission']
 
 rate_option_types = rates.each.map {|r| Spree::OptionType.find_by_name(r)}
 context_option_types = contexts.each.map {|c| Spree::OptionType.find_by_name(c)}
