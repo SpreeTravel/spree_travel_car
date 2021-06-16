@@ -18,6 +18,5 @@ option_types = [
 option_types.each do |option_type|
   Spree::OptionType.where(name: option_type[:name]).first_or_create(presentation:  option_type[:presentation],
                                                                     attr_type: option_type[:attr_type],
-                                                                    travel: option_type[:travel],
-                                                                    preciable: option_type[:preciable])
+                                                                    travel: option_type[:travel])
 end
