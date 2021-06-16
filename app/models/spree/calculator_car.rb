@@ -2,8 +2,7 @@
 
 module Spree
   class CalculatorCar < BaseCalculator
-    def initialize(context:, product:, variant:, options:)
-      @product = product
+    def initialize(context:, variant:, options:)
       @variant = variant
       @options = options
       @context_pickup_date = Date.parse(context.pickup_date(options).to_s)
@@ -11,31 +10,28 @@ module Spree
     end
 
     def calculate_price
-      return [price: product.price.to_f] if product.rates.empty?
+      return [price: variant.product.price.to_f] if variant.rates.empty?
 
-      rates = variant.rates
+      days = (context_return_date - context_pickup_date).to_i
 
-      array = []
-      rates.each do |rate|
-        next unless valid_dates?(rate)
-
-        days = (context_return_date - context_pickup_date).to_i
-
-        price = fetch_price(days, rate)
-
-        array << { price: price.format, rate: rate.id, avg: nil, variant: rate.variant }
-      end
-      array
+      variant.context_price = fetch_price(days, rate)
+      variant.rate_price = rate.id
     end
 
     private
 
-    attr_reader :product, :variant, :options, :context_pickup_date, :context_return_date
+    def rate
+      @start_date ||= Spree::OptionValue.select(:id).find_by(name: 'start_date')
+      @end_date ||= Spree::OptionValue.select(:id).find_by(name: 'end_date')
 
-    def valid_dates?(rate)
-      Date.parse(rate.start_date) <= context_pickup_date &&
-        Date.parse(rate.end_date) >= context_return_date
+      @rate ||= Spree::FindRates.new(variant_id: variant.id,
+                                     start_date_option_value_id: @start_date.id,
+                                     end_date_option_value_id: @end_date.id,
+                                     context_pickup_date: context_pickup_date,
+                                     context_return_date: context_return_date).execute
     end
+
+    attr_reader :product, :variant, :options, :context_pickup_date, :context_return_date
 
     def fetch_price(days, rate)
       rate_per_day = if days >= 3 && days <= 6
@@ -44,6 +40,8 @@ module Spree
                        rate.seven_thirteen_days
                      elsif days >= 14 && days <= 29
                        rate.fourteen_twentynine_days
+                     else
+                       Spree::Money.new(0).money
                      end
 
       days * rate_per_day

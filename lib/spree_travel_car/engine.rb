@@ -1,6 +1,7 @@
 module SpreeTravelCar
   class Engine < Rails::Engine
     require 'spree/core'
+    require 'spree_travel_core'
     isolate_namespace Spree
     engine_name 'spree_travel_car'
 

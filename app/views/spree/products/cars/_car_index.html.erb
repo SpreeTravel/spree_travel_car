@@ -1,7 +1,6 @@
 <%
    new_params = params.clone
    new_params.merge!({:controller => "spree/products", :action => "show" , :id => product.slug}).permit!.to_h #i think this permit here is a segurity issue
-   category = params[:car_category]
 %>
 <li id="product_<%= product.id %>" class="col-md-12 product-item" data-hook2="product_<%=product.product_type.name%>" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
   <div class="row">
@@ -23,21 +22,14 @@
         <div class="col-12 col-sm-4 col-md-5 col-lg-4">
           <div class="price-details mt-2">
             <div>
-              <div class="class-type">
-                <%= category.to_i == 0 ? category : Spree::OptionValue.find(category.to_i).presentation %>
-              </div>
-              <%
-                if category.to_i == 0
-                  hash = display_travel_price(variant: product.variants.joins(:option_values).where(spree_option_values: {presentation: category}).first)
-                else
-                  hash = display_travel_price(variant: product.variants.where(product: product.id).includes(:option_values).where(spree_option_values: {id: category.to_i}).first)
-                end
-              %>
-              <% if hash.present? && hash.first[:variant].can_supply? %>
-                  <span class="price">Price:<%= hash.first[:price]%> </span>
+              <% variant = product.variants.first %>
+              <% if variant.can_supply? %>
+                  <% variant.calculate_price(@context, temporal: true ) %>
+                  <span class="price">Price:<%= variant.context_price%> </span>
                   <%= render partial:'spree/products/product_type_cart_form', locals: {product: product,
-                                                                                       variant_id: hash.first[:variant].id,
-                                                                                       rate_id: hash.first[:rate]} %>
+                                                                                       variant_id: variant.id,
+                                                                                       rate_id: variant.rate_price,
+                                                                                       price: variant.context_price }%>
 
               <%else%>
                 <span class="out-of-stock"><%= Spree.t(:out_of_stock) %></span>

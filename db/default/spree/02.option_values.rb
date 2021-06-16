@@ -1,6 +1,6 @@
 ### These are the option types
 category = Spree::OptionType.find_by_name!("category")
-transmision = Spree::OptionType.find_by_name!("transmision")
+transmision = Spree::OptionType.find_by_name!("transmission")
 pickup_destination = Spree::OptionType.find_by_name!("pickup_destination")
 return_destination = Spree::OptionType.find_by_name!("return_destination")
 
