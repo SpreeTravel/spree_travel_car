@@ -39,8 +39,8 @@ module Spree
       start_date = Spree::OptionValue.find_by_name('start_date')
       end_date = Spree::OptionValue.find_by_name('end_date')
 
-      start_date = rate_option_values.select {|e| e.option_value_id == start_date.id }.first.date_value
-      end_date = rate_option_values.select {|e| e.option_value_id == end_date.id }.first.date_value
+      start_date = rate_option_values.select { |e| e.option_value_id == start_date.id }.first.date
+      end_date = rate_option_values.select { |e| e.option_value_id == end_date.id }.first.date
 
       [start_date, end_date]
     end

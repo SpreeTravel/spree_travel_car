@@ -1,4 +1,4 @@
-# frozen_string_literal: true.
+# frozen_string_literal: true
 
 module Spree
   class CalculatorCar < BaseCalculator
@@ -10,8 +10,6 @@ module Spree
     end
 
     def calculate_price
-      return [price: variant.product.price.to_f] if variant.rates.empty?
-
       days = (context_return_date - context_pickup_date).to_i
 
       variant.context_price = fetch_price(days, rate)
