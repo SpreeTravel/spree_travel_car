@@ -48,7 +48,7 @@
         <% car.context_option_types.where(attr_type: 'date').each do |d| %>
           <div class="search_box_row form-group col-md-6">
             <label for="<%= prefix %><%=d.name%>"><%= Spree.t(d.presentation.downcase) %></label>
-            <%= text_field_tag "context[#{prefix}#{d.name}]", params.dig('context', "car_#{d.name}"), :class => "datepicker #{prefix}inputs form-control" %>
+            <%= text_field_tag "context[#{prefix}#{d.name}]", params.dig('context', "car_#{d.name}"), :class => "datepicker #{prefix}inputs form-control", required: true %>
           </div>
         <%end%>
       </div>
