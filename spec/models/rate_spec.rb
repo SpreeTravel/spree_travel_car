@@ -5,23 +5,25 @@ describe Spree::Rate, type: :model do
   %i[start_date end_date three_six_days
       seven_thirteen_days fourteen_twentynine_days].each do |method_name|
     it "should respond to the #{method_name}" do
-      expect_any_instance_of(Spree::Rate).to receive(:persisted_option_value).with(method_name)
+      expect_any_instance_of(Spree::Rate).to receive(:persisted_option_value)
       Spree::Rate.new.send(method_name)
     end
   end
 
   context 'dates validation' do
-    let(:start_date_option_value) { build_stubbed(:option_value) }
-    let(:end_date_option_value) { build_stubbed(:option_value) }
-    let(:rate) { build(:rate) }
-    let(:start_date) { build(:rate_option_value,
-                             value: Date.today + 1.day,
-                             rate: rate,
-                             option_value_id: start_date_option_value.id) }
-    let(:end_date) { build(:rate_option_value,
-                           value: Date.today,
-                           rate: rate,
-                           option_value_id: end_date_option_value.id) }
+    let(:start_date_option_type) { create(:option_type_decorated, name: 'start_date', attr_type: 'date') }
+    let(:end_date_option_type) { create(:option_type_decorated, name: 'end_date', attr_type: 'date') }
+
+    let(:start_date_option_value) { create(:option_value, option_type: start_date_option_type, name: 'date', presentation: 'Date') }
+    let(:end_date_option_value) { create(:option_value, option_type: end_date_option_type, name: 'date', presentation: 'Date') }
+
+    let(:start_date_rate_option_value) { create(:rate_option_value, option_value: start_date_option_value, rate: nil) }
+    let(:end_date_rate_option_value) { create(:rate_option_value, option_value: end_date_option_value, rate: nil) }
+
+    let!(:start_date_value) { create(:value, valuable: start_date_rate_option_value, date: Date.today + 1.day) }
+    let!(:end_date_value) { create(:value, valuable: end_date_rate_option_value, date: Date.today) }
+
+    let(:rate) { build(:rate, rate_option_values: []) }
 
     before do
       allow(Spree::OptionValue).to receive(:find_by_name)
@@ -30,13 +32,20 @@ describe Spree::Rate, type: :model do
       allow(Spree::OptionValue).to receive(:find_by_name)
                                      .with('end_date')
                                      .and_return(end_date_option_value)
-      rate.rate_option_values << start_date
-      rate.rate_option_values << end_date
+
+      rate.rate_option_values << start_date_rate_option_value
+      rate.rate_option_values << end_date_rate_option_value
+
     end
 
     context 'for end_date before start_date' do
-      it 'should raise a validation error' do
+      it 'rate is not valid' do
         expect(rate).to_not be_valid
+      end
+
+      it 'should raise a validation error' do
+        rate.valid?
+
         expect(rate.errors.messages[:end_date]).to eq ['must be after start date']
       end
     end
