@@ -2,12 +2,9 @@
 
 module Spree
   module ContextDecorator
-    %i[
-      product_type start_date end_date plan adult child
-      cabin_count departure_date category pickup_destination
-      return_destination pickup_date return_date category
-    ].each do |method|
-      define_method method do |temporal=nil|
+    %i[category pickup_destinationpickup_date
+       return_destination return_date adult pickup_date return_date].each do |method|
+      define_method method do |temporal = nil|
         get_mixed_option_value(Spree::OptionType.select(:id, :name, :attr_type).find_by(name: method), temporal)
       end
     end
